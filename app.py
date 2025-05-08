@@ -1,7 +1,7 @@
 import streamlit as st
 from main import process_pdf_and_generate_flashcards
 
-# Custom CSS for flashcard styling
+
 FLASHCARD_CSS = """
 <style>
 .card {
@@ -26,7 +26,7 @@ st.set_page_config(page_title="Flashcard Generator", layout="wide")
 st.markdown(FLASHCARD_CSS, unsafe_allow_html=True)
 st.title("🧠 PDF Flashcard Generator")
 
-# File upload and topic input
+
 uploaded_file = st.file_uploader("Upload your study PDF", type=["pdf"])
 topic = st.text_input("Enter a topic for flashcards")
 
@@ -36,7 +36,7 @@ if st.button("Generate Flashcards"):
     else:
         with st.spinner("Processing PDF and generating flashcards..."):
             raw_output, context = process_pdf_and_generate_flashcards(uploaded_file, topic)
-        # Post-process raw output into list of (Q,A) pairs
+       
         cards = []
         for block in raw_output.strip().split("Flashcard ")[1:]:
             lines = block.splitlines()
@@ -45,11 +45,9 @@ if st.button("Generate Flashcards"):
                 a = lines[2].split(':', 1)[1].strip()
                 cards.append((q, a))
 
-        # Display flashcards as styled cards
         st.subheader("📋 Generated Flashcards")
         for i, (q, a) in enumerate(cards, 1):
             st.markdown(f"<div class='card'><q>{q}</q><a><strong>A:</strong> {a}</a></div>", unsafe_allow_html=True)
 
-        # Optionally show retrieved context
         with st.expander("Show Retrieved Context"):
             st.write(context)
